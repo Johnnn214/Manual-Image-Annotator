@@ -1,0 +1,8 @@
+<div class="container">
+  <h2>Collections</h2>
+  <ul class="list-group mt-3"  id="clients">
+    <li *ngFor="let collection of collections" class="list-group-item list-group-item-action"
+      (click)="clickCollection(collection)">{{ collection.CollectionName }}
+    </li>
+  </ul>
+</div>

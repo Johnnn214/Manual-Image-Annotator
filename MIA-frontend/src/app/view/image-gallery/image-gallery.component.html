@@ -1,0 +1,111 @@
+<div class="image-gallery">
+  <div *ngIf="isAdmin | async; else elseBlock">
+    <h2>{{CollectionName}}</h2>
+    <p class="card-text mb-0">Index: {{currentImageIndex}}</p>
+    <p class="card-text mb-2">Total Images: {{collectionImages.length}}</p>
+    <form class="input-group mb-1" (ngSubmit)="setCurrentImage(index)">
+      <input type="number"
+        [(ngModel)]="index"
+        name="index"
+        class="form-control"
+        id="index"
+        placeholder="Enter index"
+        min="0"
+        [max]="collectionImages.length - 1" />
+      <button type="submit" class="btn btn-primary">Set Index</button>
+    </form>
+    <div class="btn-group mb-2">
+      <button id="button" class="btn btn-secondary" (click)="previousImage()" [disabled]="currentImageIndex === 0"><i class="bi bi-caret-left-fill"></i></button>
+      <button id="button" class="btn btn-secondary" (click)="nextImage()" [disabled]="currentImageIndex === collectionImages.length - 1 || !collectionImages.length"><i class="bi bi-caret-right-fill"></i></button>
+    </div>
+    <div *ngIf="collectionImages.length > 0">
+      <div *ngIf="collectionImages[currentImageIndex]">
+        <p id="imagename" class="card-text mb-0">Image Name: {{collectionImages[currentImageIndex].ImageName}}</p>
+        <p class="card-text mb-2">Image ID: {{collectionImages[currentImageIndex].ImageID}}</p>
+        <!-- preview image -->
+        <button type="button" data-bs-toggle="modal" data-bs-target="#previewModal" class="btn btn-info">Preview Image</button>
+        <div class="modal fade modal-sm" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <!-- <div id="image-container" class="modal" tabindex="-1" aria-hidden="true"[ngStyle]="{'display': mdlSampleIsOpen ? 'flex' : 'none', 'opacity': 1}"> -->
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header mb-1">
+                <p class="modal-title" id="imagename">{{collectionImages[currentImageIndex]?.ImageName}}</p>
+                <button type="button" class="btn-close"  data-bs-dismiss="modal"></button>
+              </div>
+              <div id="btn-group">
+                <div class="btn-group">
+                  <button id="button" class="btn btn-secondary" (click)="previousImage()" [disabled]="currentImageIndex === 0"><i class="bi bi-caret-left-fill"></i></button>
+                  <button id="button" class="btn btn-secondary" (click)="nextImage()" [disabled]="currentImageIndex === collectionImages.length - 1 || !collectionImages.length"><i class="bi bi-caret-right-fill"></i></button>
+                </div>
+              </div>
+              <div class="modal-body pt-1">
+                <div *ngIf="collectionImages[currentImageIndex]">
+                  <img class="d-block w-100 img-fluid" [src]="baseurl + collectionImages[currentImageIndex].ImageURL" alt="Image">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <ng-template #elseBlock>
+    <div class="big">
+      <h2>{{CollectionName}}</h2>
+      <p class="card-text mb-0">Index: {{currentImageIndex}}</p>
+      <p class="card-text mb-2">Total Images: {{collectionImages.length}}</p>
+      <form class="input-group mb-1" (ngSubmit)="setCurrentImage(index)">
+        <input type="number"
+          [(ngModel)]="index"
+          name="index"
+          class="form-control"
+          id="index"
+          placeholder="Enter index"
+          min="0"
+          [max]="collectionImages.length - 1" />
+        <button type="submit" class="btn btn-primary">Set Index</button>
+      </form>
+      <div class="btn-group mb-2">
+        <button id="button" class="btn btn-secondary" (click)="previousImage()" [disabled]="currentImageIndex === 0"><i class="bi bi-caret-left-fill"></i></button>
+        <button id="button" class="btn btn-secondary" (click)="nextImage()" [disabled]="currentImageIndex === collectionImages.length - 1 || !collectionImages.length"><i class="bi bi-caret-right-fill"></i></button>
+      </div>
+      <div *ngIf="collectionImages.length > 0">
+        <div *ngIf="collectionImages[currentImageIndex]">
+          <p id="imagename" class="card-text mb-0">Image Name: {{collectionImages[currentImageIndex].ImageName}}</p>
+          <p class="card-text mb-2">Image ID: {{collectionImages[currentImageIndex].ImageID}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="small">
+      <div class="mb-1 d-flex justify-content-between">
+        <div class="btn-group">
+          <button id="button" class="btn btn-secondary" (click)="previousImage()" [disabled]="currentImageIndex === 0"><i class="bi bi-caret-left-fill"></i></button>
+          <button id="button" class="btn btn-secondary" (click)="nextImage()" [disabled]="currentImageIndex === collectionImages.length - 1 || !collectionImages.length"><i class="bi bi-caret-right-fill"></i></button>
+        </div>
+        <button #collapsebtn class="btn btn-primary" type="button" data-bs-toggle="collapse"  data-bs-parent="collapse" data-bs-target="#collapse" aria-expanded="false">
+          index
+        </button>
+      </div>
+      <div class="collapse" id="collapse">
+        <div class="mb-1">
+          <p class="card-text mb-0">Index: {{currentImageIndex}}</p>
+          <p class="card-text mb-1">Total Images: {{collectionImages.length}}</p>
+          <form class="input-group mb-1" (ngSubmit)="setCurrentImage(index)">
+            <input type="number"
+              [(ngModel)]="index"
+              name="index"
+              class="form-control"
+              id="index"
+              placeholder="Enter index"
+              min="0"
+              [max]="collectionImages.length - 1" />
+            <button type="submit" class="btn btn-primary">Set Index</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+</div>

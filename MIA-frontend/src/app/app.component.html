@@ -1,0 +1,48 @@
+
+  <nav id="nav" class="nav nav-tabs" role="tablist">
+      <div class="logocon">
+        <div class="logo"><h1><i class="bi bi-image"></i></h1></div>
+        <p class="logodesc1">Manual Image Annotator</p>
+        <p class="logodesc2">MIA</p>
+      </div>
+      <div #sidebar class="sidebar">
+        <ul *ngIf="(isLogin | async)">
+          <li (click)="hideSidebar()">
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 96 960 960" width="26"><path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z"/></svg>
+            </div>
+          </li>
+          <li (click)="hideSidebarIfMobile()"><a class="nav-link" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a></li>
+          <ng-container *ngIf="isAdmin | async; else client">
+          <li (click)="hideSidebarIfMobile()"><a class="nav-link" routerLink="/clients" routerLinkActive="active" ariaCurrentWhenActive="page">Clients</a></li>
+          <li (click)="hideSidebarIfMobile()"><a class="nav-link" routerLink="/collections" routerLinkActive="active" ariaCurrentWhenActive="page">Collections</a></li>
+          </ng-container>
+          <ng-template #client>
+            <li (click)="hideSidebarIfMobile()"><a class="nav-link" routerLink="/clientcollections" routerLinkActive="active" ariaCurrentWhenActive="page">Collections</a></li>
+          </ng-template>
+          <li><a routerLink="/login" (click)="signOut()" routerLinkActive="active" ariaCurrentWhenActive="page">Signout</a></li>
+        </ul>
+      </div>
+      <div>
+        <ul *ngIf="(isLogin | async)">
+          <li class="hideOnMobile"><a class="nav-link active" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a></li>
+          <ng-container *ngIf="isAdmin | async; else client">
+          <li class="hideOnMobile"><a class="nav-link" routerLink="/clients" routerLinkActive="active" ariaCurrentWhenActive="page">Clients</a></li>
+          <li class="hideOnMobile"><a class="nav-link" routerLink="/collections" routerLinkActive="active" ariaCurrentWhenActive="page">Collections</a></li>
+          </ng-container>
+          <ng-template #client>
+            <li class="hideOnMobile"><a class="nav-link" routerLink="/clientcollections" routerLinkActive="active" ariaCurrentWhenActive="page">Collections</a></li>
+          </ng-template>
+          <li class="hideOnMobile"><a routerLink="/login" (click)="signOut()" routerLinkActive="active" ariaCurrentWhenActive="page">Signout</a></li>
+          <li class="menu-button" (click)="showSidebar()">
+            <div class="menu">
+              <svg xmlns="http://www.w3.org/2000/svg" height="26" viewBox="0 96 960 960" width="26"><path d="M120 816v-60h720v60H120Zm0-210v-60h720v60H120Zm0-210v-60h720v60H120Z"/></svg>
+            </div>
+          </li>
+        </ul>
+      </div>
+  </nav>
+
+  <router-outlet></router-outlet>
+
+

@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div class="row" id="clientcollection">
+    <div class="col-sm-5 col-md-5 col-lg-4 col-xl-3" id="image-gallery" >
+      <app-image-gallery *ngIf="CollectionImages"
+        [currentImageIndex]="currentImageIndex"
+        [collectionImages]="CollectionImages"
+        (selectedImage)="selectedImage($event)">
+      </app-image-gallery>
+    </div>
+    <div class="col-sm-7 col-md-7 col-lg-8 col-xl-9">
+      <app-imageannotator
+        [selectedimage]="selectedimage"
+        [CollectionLabel]="CollectionLabel">
+      </app-imageannotator>
+    </div>
+  </div>
+</div>

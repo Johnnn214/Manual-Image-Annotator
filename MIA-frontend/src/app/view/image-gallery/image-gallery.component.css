@@ -1,0 +1,40 @@
+.image-gallery {
+  max-width: 360px;
+}
+
+#imagename{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#color{
+  background-color: blue;
+  color: white;
+}
+#image-container{
+  justify-content: center;
+}
+
+#btn-group{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#button{
+  width: 100px;
+}
+
+.small{
+  display: none;
+}
+
+@media screen and (max-width: 576px) {
+  .big{
+    display: none;
+  }
+  .small{
+    display:block;
+  }
+}

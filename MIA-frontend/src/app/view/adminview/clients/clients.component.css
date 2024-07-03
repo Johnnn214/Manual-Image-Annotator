@@ -1,0 +1,14 @@
+#clients {
+  max-width: 400px;
+}
+
+li:hover{
+  cursor: pointer;
+}
+
+
+ul{
+  padding-left: 0;
+  margin-bottom: 0;
+}
+

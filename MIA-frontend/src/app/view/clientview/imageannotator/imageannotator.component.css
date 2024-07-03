@@ -1,0 +1,169 @@
+ul {
+  padding-left: 0;
+  list-style: none;
+  padding-inline-start: 0;
+  margin-bottom: 0;
+}
+
+.page-container {
+  width: 100%;
+  padding-bottom: 180px; /* Add padding to avoid content being hidden under annotations */
+}
+.canvas-container{
+  width: min-content;
+}
+
+/* Annotation list */
+.annotations-container.bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #f9f9f9; /* Optional: to distinguish the annotation area */
+  padding-bottom: 5px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for better separation */
+  z-index: 991;
+  max-height: 50%; /* Adjust as needed */
+}
+
+.handle.bottom{
+  width: 100%;
+  height: 5px;
+  cursor: ns-resize;
+  background-color: #555;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+/* Annotations container on the right */
+.annotations-container.right {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding-top: 60px;
+  background: #f9f9f9;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 991;
+
+  display: flex;
+}
+
+.handle.right{
+  width: 5px;
+  height: 100%;
+  cursor: ew-resize;
+  background-color: #555;
+  position: absolute;
+  top: 0;
+  left: -5px; /* Position it slightly to the left to ensure visibility */
+}
+
+.annotations-content.right {
+  padding: 10px 10px 0 10px;
+}
+
+.annotations-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header.right{
+  font-size:medium;
+}
+
+#toggleAnn{
+  margin-left: 10px;
+}
+
+.annotations-list {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.labelform {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #5b5b5b;
+  border-radius: 10px;
+  height: 50px;
+  width: 150px;
+  margin-bottom: 5px;
+}
+
+#dropdup-list{
+  position: fixed;
+  z-index: 999;
+}
+
+/* popup-form */
+.popup-form {
+  position: absolute;
+  z-index: 997;
+  /* width: min-content; */
+}
+.label-div {
+  background-color: #ffffff;
+  display: inline-block;
+  border-bottom: 1px solid #5b5b5b;
+  border-left: 1px solid #5b5b5b;
+  border-top: 1px solid #5b5b5b;
+  border-radius: 10px;
+  vertical-align: top;
+  width: 175px;
+  overflow-y: auto;
+}
+
+.label-div::-webkit-scrollbar {
+  width: 10px;
+}
+
+.label-div::-webkit-scrollbar-track {
+  background: #555;
+  border-radius: 10px;
+  /* border: 1px solid #5b5b5b; */
+}
+
+.label-div::-webkit-scrollbar-thumb {
+  background: #f1f1f1;
+  border-radius: 10px;
+  border: 1px solid #5b5b5b;
+}
+
+.label-div::-webkit-scrollbar-thumb:hover {
+  background: rgb(235, 231, 231);
+}
+
+
+.label-div ul li{
+  cursor: pointer;
+  padding-inline-start: 10px;
+  padding-inline-end: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: #959494 solid 1px;
+}
+
+
+/* higlight selected label */
+.preselected {
+  background-color: rgb(201, 201, 201);
+  font-weight: bold;
+}
+@media (max-width: 768px) {
+  #toggleAnn{
+    display: none;
+  }
+
+}
+@media (max-width: 431px) {
+  .annotations-container.right {
+    padding-top: 70px;
+  }
+
+}
+
+

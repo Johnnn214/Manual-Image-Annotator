@@ -1,0 +1,117 @@
+<div class="page-container" [style.padding-bottom.px]="annotationHeight + 10"
+  [style.padding-right.px]="annotationWidth">
+  <div class="btn-group" >
+    <button class="btn btn-secondary" (click)="zoomIn()"><i class="bi bi-zoom-in"></i></button>
+    <button  class="btn btn-secondary"(click)="zoomOut()"><i class="bi bi-zoom-out"></i></button>
+    <!-- <button (click)="print()">print Rectangle</button> -->
+  </div>
+  <div class="canvas-container" [style.padding-right.px]="annotationWidth + 10">
+    <canvas #canvas class="canvas"
+      (mousedown)="onMouseDown($event)"
+      (mousemove)="onMouseMove($event)"
+      (mouseup)="onMouseUp($event)"
+      (mouseleave)="onMouseUp($event)"
+      (touchstart)="onTouchStart($event)"
+      (touchmove)="onTouchMove($event)"
+      (touchend)="onTouchEnd($event)">
+    </canvas>
+  </div>
+</div>
+<!-- Form for all annotations  -->
+<div [ngClass]="{'annotations-container': true, 'bottom': isBottom, 'right': !isBottom}"
+    [ngStyle]="isBottom ? {'height.px': annotationHeight} : {'width.px': annotationWidth}">
+    <!-- button resizing  -->
+    <div [ngClass] = "{'handle': true, 'bottom': isBottom, 'right': !isBottom }"
+      (touchstart)="startResizing($event, isBottom ? 'vertical' : 'horizontal')"
+      (mousedown)="startResizing($event, isBottom ? 'vertical' : 'horizontal')">
+    </div>
+    <div [ngClass]="{'annotations-content': true, 'bottom': isBottom, 'right': !isBottom }">
+      <div class="container annotations-header p-3 pb-2 d-flex justify-content-between align-items-center">
+        <h3 [ngClass]="{'header': true, 'bottom': isBottom, 'right': !isBottom }" >List of Annotations</h3>
+        <button id="toggleAnn" class="btn btn-secondary" (click)="toggleAnnotationPosition()">Toggle</button>
+      </div>
+      <div class="annotations-list" *ngIf="annotations.length > 0" >
+        <ul class="list-group">
+          <li (click)="selectRectForm(rectangle)"
+          class="container d-flex align-items-center justify-content-between list-group-item list-group-item-action"
+           *ngFor="let rectangle of annotations; let i = index"  [class.preselected]="rectangle === selectedRectangle">
+              <div>
+                <div class="btn-group dropup p-1 pt-0 pb-0">
+                  <div class="labelform"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img *ngIf="selectedLabels[i]" width="40" height="40" [src]="baseurl + selectedLabels[i].LabelImageSource" alt="">
+                    {{selectedLabels[i] ? selectedLabels[i].LabelName : 'Select Label'}}
+                  </div>
+                  <div id="dropdup-list">
+                    <ul class="dropdown-menu"  aria-labelledby="labelform">
+                      <li *ngFor="let Label of CollectionLabel"
+                          [class.preselected]="rectangle.LabelID === Label.LabelID"
+                          class="dropdown-item"
+                          (click)="onSelectlabel(rectangle, Label, i)">
+                        <img width="40" height="40" [src]="baseurl + Label.LabelImageSource" alt="">
+                        {{Label.LabelName}}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="btn-group dropup p-1 pt-0 pb-0">
+                  <div class="labelform"  type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img *ngIf="selectedSublabels[i]" width="40" height="40" [src]="baseurl + selectedSublabels[i]?.Sub_LabelImageSource" alt="">
+                    {{selectedSublabels[i] ? selectedSublabels[i].Sub_LabelName : 'No Sub Label'}}
+                  </div>
+                  <div id="dropdup-list">
+                    <ul class="dropdown-menu" aria-labelledby="labelform">
+                      <li *ngFor="let Sublabel of rectangle.CollectionSublabel"
+                          [class.preselected]="rectangle.Sub_LabelID === Sublabel.Sub_LabelID"
+                          class="dropdown-item"
+                          (click)="onSelectsublabel(rectangle, Sublabel, i)">
+                        <img width="40" height="40" [src]="baseurl + Sublabel.Sub_LabelImageSource" alt="">
+                        {{Sublabel.Sub_LabelName}}
+                      </li>
+                      <li class="dropdown-item" (click)="selectnosublabels(rectangle, i)">
+                        <button class="btn btn-close" ></button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom-div d-flex align-items-center">
+                <button class="btn btn-danger" (click)="deleteAnnotation(rectangle, i)" ><i class="bi bi-trash3"></i></button>
+              </div>
+          </li>
+        </ul>
+    </div>
+  </div>
+</div>
+<!-- Ribbon list -->
+<div *ngFor="let rectangle of annotations; let i = index">
+  <div *ngIf="showFormPopup[i]" class="popup-form"
+    [style.top.px]="calculatePopupPosition(rectangle, i).top"
+    [style.left.px]="calculatePopupPosition(rectangle, i).left"
+    [style.width]="calculatePopupPosition(rectangle, i).returnwidth">
+    <div #popuplabel id="popuplabel" class="label-div" [style.max-height.vh]="calculatePopupPosition(rectangle, i).maxheight">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-action" *ngFor="let Label of CollectionLabel"
+          [class.preselected]="rectangle.LabelID === Label.LabelID"
+          (click)="onSelectlabel(rectangle, Label, i)">
+          <img width="40" height="40" [src]="baseurl + Label.LabelImageSource" alt="">
+          {{Label.LabelName}}
+        </li>
+      </ul>
+    </div>
+    <div #popupsublabel id="popupaublabel" class="label-div" [style.max-height.vh]="calculatePopupPosition(rectangle, i).maxheight"
+      *ngIf="rectangle.CollectionSublabel && (showSubLabel[i] || rectangle.Sub_LabelID)">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-action" *ngFor="let Sublabel of rectangle.CollectionSublabel"
+          [class.preselected]="rectangle.Sub_LabelID === Sublabel.Sub_LabelID"
+          (click)="onSelectsublabel(rectangle, Sublabel, i)">
+          <img width="40" height="40" [src]="baseurl + Sublabel.Sub_LabelImageSource" alt="">
+          {{Sublabel.Sub_LabelName}}
+        </li>
+        <li class="list-group-item list-group-item-action" (click)="selectnosublabels(rectangle, i)">
+          <button class="btn btn-close"></button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+

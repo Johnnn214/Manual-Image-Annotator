@@ -1,0 +1,67 @@
+<div class="container">
+  <h2>Collections</h2>
+  <div id="collection">
+    <form class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Add New Collection" name="collectionName" [(ngModel)]="newCollectionName">
+      <button class="btn btn-primary" (click)="addCollection(newCollectionName)">Add Collection</button>
+    </form>
+    <div *ngIf="errorMessage" class="alert alert-warning p-2 d-flex justify-content-around align-items-center" role="alert" >
+      <p class="mb-0" ><i class="bi bi-exclamation-triangle"></i>
+      {{errorMessage}}</p>
+    </div>
+    <ul class="list-group">
+      <li *ngFor="let collection of collections let i = index" (click)="clickCollection(collection)" class="list-group-item list-group-item-action" >
+        <div class="mb-1 d-flex justify-content-between align-items-center" >
+          {{ collection.CollectionName }}
+          <button *ngIf="iscollapsed[i] == false" class="btn btn-primary" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
+            aria-expanded="false" [attr.aria-controls]="'collapse' + i" (click)="toggleisCollapsedState(i, true); $event.stopPropagation()">
+            <i class="bi bi-plus-lg"></i>
+          </button>
+          <button *ngIf="iscollapsed[i] == true" class="btn btn-danger" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i"
+            aria-expanded="false" [attr.aria-controls]="'collapse' + i" (click)="toggleisCollapsedState(i, false); $event.stopPropagation()">
+            <i class="bi bi-dash-lg"></i>
+          </button>
+        </div>
+        <div [class]="'collapse'+ collapse[i]" [attr.id]="'collapse' + i">
+          <div class="mb-1 d-flex justify-content-between align-items-center" (click)="$event.stopPropagation()">
+            <form class="input-group">
+              <input type="text" class="form-control" placeholder="Edit Collection Name" name="collectionName"
+                [(ngModel)]="editedCollectionName[i]">
+              <button id="editbtn" class="btn btn-primary" (click)="editCollectionName(collection.CollectionID, editedCollectionName[i], i)">Edit</button>
+            </form>
+            <button type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#deleteModal' + i" class="btn btn-danger" (click)="$event.stopPropagation();"><i class="bi bi-trash3"></i></button>
+          </div>
+        </div>
+        <div (click)="$event.stopPropagation();" *ngIf="editerrorMessage[i]" class="alert alert-warning p-2 mb-0 d-flex justify-content-left align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle"></i>
+           <p class="error mb-0">{{editerrorMessage[i]}}</p>
+        </div>
+      </li>
+         <!-- Modal -->
+         <div *ngFor="let collection of collections let i = index" class="modal fade modal-sm" [attr.id]="'deleteModal' + i" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body" >
+                <div class="card-text mb-0">
+                  <p class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Are you sure you want to delete
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <p class="mb-0 bold">{{collection.CollectionName}}</p>
+                    <p class="mb-0">?</p>
+                  </div>
+                </div>
+                <small class="card-text mb-0">It will delete all the images, labels and annotations in the collection.</small>
+              </div>
+              <div class="modal-footer p-1">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button (click)="deleteCollection(collection.CollectionID, i);" type="button"  data-bs-dismiss="modal" class="btn btn-danger">Delete
+          	    </button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </ul>
+  </div>
+</div>

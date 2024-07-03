@@ -1,0 +1,167 @@
+<div class="row">
+  <!-- Label Section -->
+  <div class="col-md-6 col-xl-5">
+    <div class="input" >
+      <div class="mb-1 mt-1 d-flex justify-content-between align-items-center" >
+        <h2 class="mb-0">Label</h2>
+        <button *ngIf="iscolapse1 == true" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1"
+          aria-expanded="false" aria-controls="collapse1" (click)="toggleColapse1(); toggleColapse2()" >
+          <i class="bi bi-plus-lg"></i>
+        </button>
+        <button *ngIf="iscolapse2 == true" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2"
+          aria-expanded="false" aria-controls="collapse2" (click)="toggleColapse2()">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+        <button *ngIf="iscolapse1 == false && iscolapse2 == false" class="btn btn-danger" type="button" data-bs-toggle="collapse"  data-bs-target=".multi-collapse1"
+          aria-expanded="false" aria-controls="#collapse1 #collapse2" (click)="toggleColapse1()">
+          <i class="bi bi-dash-lg"></i>
+        </button>
+      </div>
+      <form class="input-group mb-1" (ngSubmit)="addLabel(newLabel, CollectionID)">
+        <input type="text" [(ngModel)]="newLabel" name="newLabel" class="form-control" placeholder="Add New Label"/>
+        <button class="btn btn-primary" type="submit">Add</button>
+      </form>
+      <div class="collapse multi-collapse1" id="collapse1">
+        <input [disabled]="!selectedLabelID" type="file" (change)="uploadLabelFileImage($event)" class="form-control mb-1">
+        <div class="collapse multi-collapse1" id="collapse2">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <form class="input-group form" (ngSubmit)="editLabelName(newEditedLabel, selectedLabelID!, CollectionID)">
+              <input [disabled]="!selectedLabelID" type="text" [(ngModel)]="newEditedLabel" name="newLabel" class="form-control" placeholder="Edit Label Name"/>
+              <button [disabled]="!selectedLabelID" class="btn btn-primary" type="submit">Edit</button>
+            </form>
+            <div>
+              <button *ngIf="ischeckedlabel == false" [disabled]="!selectedLabelID" type="button" data-bs-toggle="modal" data-bs-target="#deleteModalLabel" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+              <button *ngIf="ischeckedlabel == true" [disabled]="!selectedLabelID" class="btn btn-danger" (click)="removeLabel()"><i class="bi bi-trash3"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="errorMessageLabel" id="error" class="alert alert-warning p-2 d-flex justify-content-center mb-1" role="alert" >
+      <i class="bi bi-exclamation-triangle"></i>
+      <div>{{errorMessageLabel}}</div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade modal-sm" id="deleteModalLabel" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body" >
+            <div class="card-text mb-0">
+              <p class="mb-0">
+                <i class="bi bi-exclamation-triangle"></i>
+                Are you sure you want to delete this Label?
+              </p>
+              <small class="card-text mb-0">
+                It will delete all the annotations related to this Label.
+              </small>
+            </div>
+          </div>
+          <div class="modal-footer p-1">
+            <div class="form-check d-flex justify-content-left align-items-center w-100">
+              <input (click)="togglecheckLabel()" class="form-check-input p-1" type="checkbox" value="" id="flexCheckIndeterminate">
+              <label class="form-check-label p-1" for="flexCheckIndeterminate">
+                Don't ask again
+              </label>
+            </div>
+            <div class="p-1 d-flex justify-content-around">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button (click)="removeLabel()" type="button"  data-bs-dismiss="modal" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="list-group-container">
+      <ul id="list-group" class="list-group">
+        <li class="list-group-item list-group-item-action" *ngFor="let Label of CollectionLabel" (click)="onSelectLabel(Label.LabelID)" [class.preselected]="selectedLabelID === Label.LabelID">
+          <img width="40" height="40" [src]=" baseurl + Label.LabelImageSource" alt="">
+          {{Label.LabelName}}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sub Label Section -->
+  <div class="col-md-6 col-xl-7">
+    <div class="input" >
+      <div class="mb-1 mt-1 d-flex justify-content-between align-items-center" >
+        <h2 class="mb-0">Sub Label</h2>
+        <button *ngIf="iscolapse3 == true" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3"
+          aria-expanded="false" aria-controls="collapse3" (click)="toggleColapse3(); toggleColapse4()" >
+          <i class="bi bi-plus-lg"></i>
+        </button>
+        <button *ngIf="iscolapse4 == true" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4"
+          aria-expanded="false" aria-controls="collapse4" (click)="toggleColapse4()">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+        <button *ngIf="iscolapse3 == false && iscolapse4 == false" class="btn btn-danger" type="button" data-bs-toggle="collapse"  data-bs-target=".multi-collapse2"
+          aria-expanded="false" aria-controls="#collapse3 #collapse4" (click)="toggleColapse3()">
+          <i class="bi bi-dash-lg"></i>
+        </button>
+      </div>
+      <form (ngSubmit)="addSublabel(newSublabel)">
+        <div class="input-group mb-1">
+          <input [disabled]="!selectedLabelID" type="text" [(ngModel)]="newSublabel" name="newSublabel" class="form-control" placeholder="Add New Sub Label"/>
+          <button [disabled]="!selectedLabelID" class="btn btn-primary" type="submit">Add</button>
+        </div>
+      </form>
+      <div class="collapse multi-collapse2" id="collapse3">
+        <input [disabled]="!selectedSublabelID" type="file" (change)="uploadSubLabelFileImage($event)" class="form-control mb-1">
+        <div class="collapse multi-collapse2" id="collapse4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <form class="input-group form" (ngSubmit)="editSublabelName(newEditedSubLabel, selectedSublabelID!, selectedLabelID!)">
+              <input [disabled]="!selectedSublabelID" type="text" [(ngModel)]="newEditedSubLabel" name="newLabel" class="form-control" placeholder="Edit Sub Label Name"/>
+              <button [disabled]="!selectedSublabelID" class="btn btn-primary" type="submit">Edit</button>
+            </form>
+            <div>
+              <button *ngIf="ischeckedsublabel == false" [disabled]="!selectedSublabelID" type="button" data-bs-toggle="modal" data-bs-target="#deleteModalSub" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+              <button *ngIf="ischeckedsublabel == true" [disabled]="!selectedSublabelID" class="btn btn-danger" (click)="removeSublabel()"><i class="bi bi-trash3"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="errorMessageSubLabel" id="error" class="alert alert-warning p-2 d-flex justify-content-center mb-1" role="alert" >
+      <i class="bi bi-exclamation-triangle"></i>
+      <div>{{errorMessageSubLabel}}</div>
+    </div>
+        <!-- Modal -->
+        <div class="modal fade modal-sm" id="deleteModalSub" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body" >
+                <div class="card-text mb-0">
+                  <p class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Are you sure you want to delete this Sub Label?
+                  </p>
+                  <small class="card-text mb-0">
+                    It will delete all the annotations related to this Sub Label.
+                  </small>
+                </div>
+              </div>
+              <div class="modal-footer p-1">
+                <div class="form-check d-flex justify-content-left align-items-center w-100">
+                  <input (click)="togglecheckSub()" class="form-check-input p-1" type="checkbox" value="" id="flexCheckIndeterminate">
+                  <label class="form-check-label p-1" for="flexCheckIndeterminate">
+                    Don't ask again
+                  </label>
+                </div>
+                <div class="p-1 d-flex justify-content-around">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button (click)="removeSublabel()" type="button"  data-bs-dismiss="modal" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div id="list-group-container">
+      <ul id="list-group" class="list-group">
+        <li class="list-group-item" *ngFor="let Sublabel of CollectionSublabel" (click)="onSelectSub(Sublabel.Sub_LabelID)" [class.preselected]="selectedSublabelID === Sublabel.Sub_LabelID">
+          <img width="40" height="40" [src]="baseurl +  Sublabel.Sub_LabelImageSource" alt="">
+          {{Sublabel.Sub_LabelName}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

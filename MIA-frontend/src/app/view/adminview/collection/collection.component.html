@@ -1,0 +1,107 @@
+<div class="container-sm container-xl pb-3">
+  <div class="row">
+     <!-- Image Gallery Section -->
+    <div class="col-sm-12 col-md-6 col-xl-5" *ngIf="CollectionImages">
+      <app-image-gallery
+        [currentImageIndex]="currentImageIndex"
+        [collectionImages]="CollectionImages"
+        (updatedImageIndex)="updatedcurrentImageIndex($event)">
+      </app-image-gallery>
+    </div>
+       <!-- Upload Images Section -->
+    <div class="col-sm-12 col-md-6 col-xl-7">
+      <h2>Upload Images</h2>
+      <div class="input">
+        <label for="fileInput">
+          <div class="file-container mb-2">
+            <h1><i class="bi bi-cloud-arrow-up"></i></h1>
+            <div class="box-image">Drag files here or click to upload</div>
+            <input class="fileInput" id="fileInput" type="file" (change)="dragFiles($event)" multiple>
+          </div>
+        </label>
+        <form class="input-group mb-2" (ngSubmit)="onSubmit()">
+          <input #fileinput class="fileinput form-control" id="fileinput" type="file" (change)="onFileSelected($event)" multiple />
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div *ngIf="errorMessageupload" class="alert alert-warning p-2 mb-2 d-flex justify-content-left align-items-center" role="alert" >
+          <i class="bi bi-exclamation-triangle"></i>
+          <div class="errorMessage">{{errorMessageupload}}</div>
+        </div>
+        <div class="mb-1">
+          <button *ngIf="ischecked == false" [disabled]="CollectionImages[currentImageIndex] === undefined" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal" class="btn btn-danger"><i class="bi bi-trash3"></i> Current Image</button>
+          <button *ngIf="ischecked == true" [disabled]="CollectionImages[currentImageIndex] === undefined" class="btn btn-danger" (click)="deleteCurrentImage()"><i class="bi bi-trash3"></i> Current Image</button>
+        </div>
+        <div>
+          <button *ngIf="ischeckedall == false" [disabled]="CollectionImages.length == 0" type="button" data-bs-toggle="modal" data-bs-target="#deleteallModal" class="btn btn-danger"><i class="bi bi-trash3"></i> All Images</button>
+          <button *ngIf="ischeckedall == true" class="btn btn-danger" [disabled]="CollectionImages.length == 0" (click)="deleteAllImages()"><i class="bi bi-trash3"></i> All Images</button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade modal-sm" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body" >
+                <div class="card-text mb-0">
+                  <p class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Are you sure you want to delete this image?
+                  </p>
+                  <small class="card-text mb-0">
+                    It will delete all the annotations related to this image.
+                  </small>
+                </div>
+              </div>
+              <div class="modal-footer p-1">
+                <div class="form-check d-flex justify-content-left align-items-center w-100">
+                  <input (click)="toggleCheck()" class="form-check-input p-1" type="checkbox" value="" id="flexCheckIndeterminate">
+                  <label class="form-check-label p-1" for="flexCheckIndeterminate">
+                    Don't ask again
+                  </label>
+                </div>
+                <div class="p-1 d-flex justify-content-around">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button (click)="deleteCurrentImage()" type="button"  data-bs-dismiss="modal" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade modal-sm" id="deleteallModal" tabindex="-1" aria-labelledby="deleteModalallLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body" >
+                <div class="card-text mb-0">
+                  <p class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Are you sure you want to delete all images?
+                  </p>
+                  <small class="card-text mb-0">
+                    It will delete all the annotations related to all the images.
+                  </small>
+                </div>
+              </div>
+              <div class="modal-footer p-1">
+                <div class="form-check d-flex justify-content-left align-items-center w-100">
+                  <input (click)="toggleCheckall()" class="form-check-input p-1" type="checkbox" value="" id="flexCheckIndeterminate">
+                  <label class="form-check-label p-1" for="flexCheckIndeterminate">
+                    Don't ask again
+                  </label>
+                </div>
+                <div class="p-1 d-flex justify-content-around">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button (click)="deleteAllImages()" type="button"  data-bs-dismiss="modal" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Label Section -->
+  <div class="row">
+    <app-label
+      [CollectionLabel]="CollectionLabel">
+    </app-label>
+  </div>
+</div>

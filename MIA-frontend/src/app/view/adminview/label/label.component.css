@@ -1,0 +1,56 @@
+.input{
+  max-width: 360px;
+}
+
+
+ul{
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+#list-group::-webkit-scrollbar {
+  width: 5px;
+}
+
+#list-group::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+#list-group::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+#list-group::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+#list-group {
+  background-color: #ffffff;
+}
+
+#list-group-container {
+  border: 1px solid rgb(187, 184, 184);
+  max-width: 450px;
+  height: 230px;
+  border-radius: 9px;
+  overflow-y: auto;
+}
+#error{
+  max-width: 450px;
+}
+
+#error div{
+  padding-left: 10px;
+}
+
+/* higlight selected label */
+.preselected {
+  background-color: rgb(201, 201, 201);
+  font-weight: bold;
+}
+
+.input-group.form{
+  margin-right: 10px;
+}
